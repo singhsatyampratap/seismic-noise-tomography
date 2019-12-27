@@ -194,7 +194,45 @@ stations = psstation.get_stations(mseed_dir=MSEED_DIR,
                                   verbose=True)
 
 # Initializing collection of cross-correlations
-xc = pscrosscorr.CrossCorrelationCollection()
+
+''' This is minor editing in case your code crashes in between and you want to start from the same month
+ you just have to make a minor change in the .cnf (input file)
+Change the Start date to the beginning of month when the crash happened and then run this code
+In case you don't know when the crash occured use crossreader.py to export the .txt file '''
+
+# parsing configuration file to import dir of cross-corr results
+from pysismo.psconfig import CROSSCORR_DIR
+
+# loading cross-correlations (looking for *.pickle files in dir *CROSSCORR_DIR*)
+flist = sorted(glob.glob(os.path.join(CROSSCORR_DIR, 'xcorr*.pickle*')))
+print 'Select file(s) containing cross-correlations to process: [All except backups]'
+print '0 - All except backups (*~)'
+print '\n'.join('{} - {}'.format(i + 1, os.path.basename(f))
+                for i, f in enumerate(flist))
+
+res = raw_input('\n')
+if not res:
+    pickle_files = [f for f in flist if f[-1] != '~']
+else:
+    pickle_files = [flist[int(i)-1] for i in res.split()]
+
+
+# processing each set of cross-correlations
+for pickle_file in pickle_files:
+    print "\nProcessing cross-correlations of file: " + pickle_file
+    xc = pscrosscorr.load_pickled_xcorr(pickle_file)
+
+#uncomment the line below if you want to start the cross correlation for beginning 
+#xc = pscrosscorr.CrossCorrelationCollection()
+
+
+
+
+
+
+
+
+
 
 # Loop on day
 nday = (LASTDAY - FIRSTDAY).days + 1

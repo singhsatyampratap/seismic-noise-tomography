@@ -1594,7 +1594,7 @@ class CrossCorrelationCollection(AttribDict):
 
         return SNRarraydict
 
-    def add(self, tracedict, stations, xcorr_tmax, xcorrdict=None, verbose=False):
+    def add(self,k,tracedict, stations, xcorr_tmax, xcorrdict=None, verbose=False):
         """
         Stacks cross-correlations between pairs of stations
         from a dict of {station.name: Trace} (in *tracedict*).
@@ -1604,7 +1604,7 @@ class CrossCorrelationCollection(AttribDict):
 
         Initializes self[station1][station2] as an instance of CrossCorrelation
         if the pair station1-station2 is not in self
-
+        @type k: name of the base station for rotation
         @type tracedict: dict from str to L{obspy.core.trace.Trace}
         @type stations: list of L{pysismo.psstation.Station}
         @type xcorr_tmax: float
@@ -1613,7 +1613,22 @@ class CrossCorrelationCollection(AttribDict):
         if not xcorrdict:
             xcorrdict = {}
 
-        stationtrace_pairs = it.combinations(sorted(tracedict.items()), 2)
+        #stationtrace_pairs = it.combinations(sorted(tracedict.items()), 2)
+        
+        v=tracedict[k]
+        k1=(k,v)
+        listtracedict = [(k, v) for k, v in tracedict.items()] 
+        stationtrace_pairs=[(k1,k2) for k2 in listtracedict]
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         for (s1name, tr1), (s2name, tr2) in stationtrace_pairs:
             if verbose:
                 print "{s1}-{s2}".format(s1=s1name, s2=s2name),

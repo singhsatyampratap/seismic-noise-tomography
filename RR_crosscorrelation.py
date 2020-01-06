@@ -567,7 +567,7 @@ for date in dates:
         print
 
     print "Stacking cross-correlations"
-    xc.add(tracedict=tracedict,
+    xc.add(k=rot_base_station,tracedict=tracedict,
            stations=stations,
            xcorr_tmax=CROSSCORR_TMAX,
            xcorrdict=xcorrdict,
